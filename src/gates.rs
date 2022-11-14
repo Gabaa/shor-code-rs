@@ -1,8 +1,4 @@
-use std::ops::MulAssign;
-
 use nalgebra::Matrix4;
-use nalgebra::Unit;
-use nalgebra::Vector4;
 use num::complex::Complex64;
 use num::One;
 use num::Zero;
