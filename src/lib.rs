@@ -1,6 +1,8 @@
 #![allow(incomplete_features)]
 #![feature(generic_const_exprs)]
 
+pub mod gates;
+
 use nalgebra::ArrayStorage;
 use nalgebra::Const;
 use nalgebra::Vector;
@@ -10,6 +12,7 @@ use num::Zero;
 
 type ComplexVector<const N: usize> = Vector<Complex64, Const<N>, ArrayStorage<Complex64, N, 1>>;
 
+#[derive(Debug, PartialEq)]
 pub struct State<const N: usize> {
     coefficients: ComplexVector<N>,
 }
