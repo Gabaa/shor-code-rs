@@ -10,30 +10,30 @@ use num::complex::Complex64;
 use num::One;
 use num::Zero;
 
+/// A vector of complex numbers with N entries.
 type ComplexVector<const N: usize> = Vector<Complex64, Const<N>, ArrayStorage<Complex64, N, 1>>;
 
 #[derive(Debug, PartialEq)]
+/// A quantum state with log2(N) qubits (requiring N entries in complex state vector).
 pub struct State<const N: usize> {
     coefficients: ComplexVector<N>,
 }
 
 impl State<2> {
-    pub fn qubit_zero() -> State<2> {
-        let coefficients =
-            ComplexVector::<2>::from_iterator([One::one(), Zero::zero()].into_iter());
+    pub fn zero() -> State<2> {
+        let coefficients = ComplexVector::<2>::from_vec(vec![One::one(), Zero::zero()]);
         State { coefficients }
     }
 
-    pub fn qubit_one() -> State<2> {
-        let coefficients =
-            ComplexVector::<2>::from_iterator([Zero::zero(), One::one()].into_iter());
+    pub fn one() -> State<2> {
+        let coefficients = ComplexVector::<2>::from_vec(vec![Zero::zero(), One::one()]);
         State { coefficients }
     }
 }
 
 impl<const N: usize> State<N> {
     pub fn product<const M: usize>(self, other: State<M>) -> State<{ N * M }> {
-        let mut coefficients = ComplexVector::<{ N * M }>::from_element(One::one());
+        let mut coefficients = ComplexVector::<{ N * M }>::repeat(One::one());
 
         for (i, c1) in self.coefficients.iter().enumerate() {
             for (j, c2) in other.coefficients.iter().enumerate() {
@@ -51,15 +51,15 @@ mod tests {
 
     #[test]
     fn product_works() {
-        let zero = State::qubit_zero();
-        let one = State::qubit_one();
-        let prod = zero.product(one);
+        let prod = State::zero().product(State::one());
+        let expected = ComplexVector::<2>::from_vec(vec![
+            Complex64::zero(),
+            Complex64::one(),
+            Complex64::zero(),
+            Complex64::zero(),
+        ]);
 
         assert_eq!(prod.coefficients.len(), 4);
-
-        assert_eq!(prod.coefficients[0], Complex64::zero());
-        assert_eq!(prod.coefficients[1], Complex64::one());
-        assert_eq!(prod.coefficients[2], Complex64::zero());
-        assert_eq!(prod.coefficients[3], Complex64::zero());
+        assert_eq!(prod.coefficients, expected);
     }
 }

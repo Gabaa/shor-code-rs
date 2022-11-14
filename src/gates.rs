@@ -49,10 +49,10 @@ mod tests {
 
     use super::*;
 
-    #[test_case(State::qubit_zero().product(State::qubit_zero()), State::qubit_zero().product(State::qubit_zero()) ; "cnot 00 -> 00")]
-    #[test_case(State::qubit_zero().product(State::qubit_one()), State::qubit_zero().product(State::qubit_one()) ; "cnot 01 -> 01")]
-    #[test_case(State::qubit_one().product(State::qubit_zero()), State::qubit_one().product(State::qubit_one()) ; "cnot 10 -> 11")]
-    #[test_case(State::qubit_one().product(State::qubit_one()), State::qubit_one().product(State::qubit_zero()) ; "cnot 11 -> 10")]
+    #[test_case(State::zero().product(State::zero()), State::zero().product(State::zero()) ; "cnot 00 -> 00")]
+    #[test_case(State::zero().product(State::one()), State::zero().product(State::one()) ; "cnot 01 -> 01")]
+    #[test_case(State::one().product(State::zero()), State::one().product(State::one()) ; "cnot 10 -> 11")]
+    #[test_case(State::one().product(State::one()), State::one().product(State::zero()) ; "cnot 11 -> 10")]
     fn cnot_works(mut state: State<4>, expected: State<4>) {
         cnot(&mut state);
         assert_eq!(state, expected);
