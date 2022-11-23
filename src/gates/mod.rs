@@ -81,7 +81,8 @@ pub struct HadamardGate;
 
 impl Gate<2> for HadamardGate {
     fn matrix(&self) -> ComplexMatrix<2> {
-        todo!()
+        let v = Complex64::one() / Complex64::new(2.0, 0.0).sqrt();
+        ComplexMatrix::from_vec(vec![v, v, v, -v])
     }
 }
 
@@ -89,7 +90,7 @@ pub struct BitFlipGate;
 
 impl Gate<2> for BitFlipGate {
     fn matrix(&self) -> ComplexMatrix<2> {
-        todo!()
+        ComplexMatrix::from_vec(vec![Zero::zero(), One::one(), One::one(), Zero::zero()])
     }
 }
 
@@ -97,7 +98,12 @@ pub struct PhaseFlipGate;
 
 impl Gate<2> for PhaseFlipGate {
     fn matrix(&self) -> ComplexMatrix<2> {
-        todo!()
+        ComplexMatrix::from_vec(vec![
+            Complex64::one(),
+            Complex64::zero(),
+            Complex64::zero(),
+            -Complex64::one(),
+        ])
     }
 }
 
@@ -126,12 +132,11 @@ impl Gate<4> for ControlledBitFlipGate {
     }
 }
 
-// TODO: Make generic controlled-U gate.
 pub struct ControlledGate<const N: usize, G: Gate<N>>(G);
 
 impl<const N: usize, G: Gate<N>> Gate<{ N << 1 }> for ControlledGate<N, G> {
     fn matrix(&self) -> ComplexMatrix<{ N << 1 }> {
-        todo!()
+        todo!("generic controlled-U gate not implemented")
     }
 }
 
