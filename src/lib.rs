@@ -1,6 +1,7 @@
 #![allow(incomplete_features)]
 #![feature(generic_const_exprs)]
 
+pub mod codes;
 pub mod gates;
 
 use nalgebra::ArrayStorage;
@@ -82,7 +83,7 @@ mod tests {
     #[test]
     fn product_works() {
         let prod = State::zero().product(State::one());
-        let expected = ComplexVector::<2>::from_vec(vec![
+        let expected = ComplexVector::<4>::from_vec(vec![
             Complex64::zero(),
             Complex64::one(),
             Complex64::zero(),
