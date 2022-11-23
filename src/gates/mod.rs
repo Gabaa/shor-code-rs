@@ -1,14 +1,7 @@
 mod permutation;
 
-use nalgebra::ArrayStorage;
-use nalgebra::Complex;
-use nalgebra::Const;
 use nalgebra::DMatrix;
-use nalgebra::Matrix;
-use nalgebra::Matrix2;
 use nalgebra::Matrix4;
-use nalgebra::SquareMatrix;
-use nalgebra::U2;
 use num::complex::Complex64;
 use num::One;
 use num::Zero;
@@ -53,7 +46,7 @@ pub trait Gate<const N: usize> {
         let u = self.matrix();
         let u2 = u.kronecker(&id);
 
-        let u3 = ComplexMatrix::<M>::from_iterator(u2.into_iter().map(|&x| x));
+        let u3 = ComplexMatrix::<M>::from_iterator(u2.iter().copied());
 
         state.coefficients = u3 * state.coefficients;
     }
