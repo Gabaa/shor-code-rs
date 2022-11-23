@@ -5,6 +5,7 @@ pub mod gates;
 
 use nalgebra::ArrayStorage;
 use nalgebra::Const;
+use nalgebra::Matrix;
 use nalgebra::Vector;
 use num::complex::Complex64;
 use num::One;
@@ -12,6 +13,8 @@ use num::Zero;
 
 /// A vector of complex numbers with N entries.
 type ComplexVector<const N: usize> = Vector<Complex64, Const<N>, ArrayStorage<Complex64, N, 1>>;
+type ComplexMatrix<const N: usize> =
+    Matrix<Complex64, Const<N>, Const<N>, ArrayStorage<Complex64, N, N>>;
 
 #[derive(Debug, PartialEq)]
 /// A quantum state with log2(N) qubits (requiring N entries in complex state vector).
@@ -42,6 +45,33 @@ impl<const N: usize> State<N> {
         }
 
         State { coefficients }
+    }
+
+    pub fn permute_qubits(&mut self, permutation: &[usize]) {
+        assert_eq!(permutation.len(), N);
+
+        let mut perm_mat = ComplexMatrix::<N>::zeros();
+        for (i, &j) in permutation.iter().enumerate() {
+            *perm_mat.get_mut((i, j)).unwrap() = One::one();
+        }
+
+        self.coefficients = perm_mat * self.coefficients;
+    }
+
+    pub fn number_of_qubits(&self) -> usize {
+        if N == 0 {
+            // shouldn't be possible, but let's be thorough
+            return 0;
+        }
+
+        let mut n = N;
+        let mut r = 0;
+        while n != 1 {
+            n >>= 1;
+            r += 1;
+        }
+
+        r
     }
 }
 
