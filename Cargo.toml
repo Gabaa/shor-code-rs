@@ -4,6 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-nalgebra = "0.31.3"
-num = "0.4.0"
-test-case = "2.2.2"
+qvnt = "0.4.4"
